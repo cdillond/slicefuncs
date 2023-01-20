@@ -124,3 +124,56 @@ func Flatten[T any](s [][]T) []T {
 	}
 	return res
 }
+
+// Returns true if every element of a is equal to the element of b at the same index. Equals only works for built-in types that satisfy the comparable interface.
+func Equals[C comparable](a, b []C) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := 0; i < len(a); i++ {
+		if a[i] != b[i] {
+			return false
+		}
+	}
+	return true
+}
+
+// Returns true if and only if a and b are the same length and for each index of a, eq(a[index], b[index]) returns true. The eq function must return true if t1 is equal to t2 and return false if t1 and t2 are not equal.
+func EqualsAny[T any](a, b []T, eq func(t1, t2 T) bool) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := 0; i < len(a); i++ {
+		if !eq(a[i], b[i]) {
+			return false
+		}
+	}
+	return true
+}
+
+// Returns an ordered slice of all unique elements of s.
+func Unique[C comparable](s []C) []C {
+	set := make(map[C]struct{}, len(s))
+	res := make([]C, 0, len(s))
+	for i := 0; i < len(s); i++ {
+		_, ok := set[s[i]]
+		if !ok {
+			res = append(res, s[i])
+			set[s[i]] = struct{}{}
+		}
+	}
+	return res[:len(res):len(res)]
+}
+
+// Returns a slice containing the indices of s where fn(s[i]) returns true.
+// This can be used, for instance, to find all occurrences of a value in a given slice.
+func TrueAt[T any](s []T, fn func(t T) bool) []int {
+	res := make([]int, 0, len(s))
+
+	for i := 0; i < len(s); i++ {
+		if fn(s[i]) {
+			res = append(res, i)
+		}
+	}
+	return res[:len(res):len(res)]
+}
