@@ -177,3 +177,33 @@ func TrueAt[T any](s []T, fn func(t T) bool) []int {
 	}
 	return res[:len(res):len(res)]
 }
+
+// Returns the least element of s.
+func Min[Rn RealNumber](s []Rn) (Rn, error) {
+	var res Rn
+	if len(s) < 1 {
+		return res, fmt.Errorf("empty slice")
+	}
+	res = s[0]
+	for i := 1; i < len(s); i++ {
+		if s[i] < res {
+			res = s[i]
+		}
+	}
+	return res, nil
+}
+
+// Returns the greatest element of s.
+func Max[Rn RealNumber](s []Rn) (Rn, error) {
+	var res Rn
+	if len(s) < 1 {
+		return res, fmt.Errorf("empty slice")
+	}
+	res = s[0]
+	for i := 1; i < len(s); i++ {
+		if s[i] > res {
+			res = s[i]
+		}
+	}
+	return res, nil
+}
