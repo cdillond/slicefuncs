@@ -36,14 +36,14 @@ func MapTo[T, R any](s []T, fn func(t T) R) []R {
 
 // Returns a slice of all elements of `s` that satisfy the condtion determined by `fn`.
 func Filter[T any](s []T, fn func(t T) bool) []T {
-	// pre-allocate res
+	// pre-allocate res based on its max potential size
 	res := make([]T, 0, len(s))
 	for i := 0; i < len(s); i++ {
 		if fn(s[i]) {
 			res = append(res, s[i])
 		}
 	}
-	// reduce cap(res) back to len(res) to save memory
+	// shrink cap(res) back to len(res) to save memory
 	return res[:len(res):len(res)]
 }
 
@@ -94,10 +94,11 @@ func Prod[N Number](s []N) N {
 
 // Returns a slice of type `[]T` with a length of `n` where all elements are set to `v`.
 func Repeat[T any](v T, n int) ([]T, error) {
+	var res []T
 	if n < 0 {
-		return []T{}, fmt.Errorf("n cannot be less than 0")
+		return res, fmt.Errorf("n cannot be less than 0")
 	}
-	res := make([]T, n)
+	res = make([]T, n)
 	for i := 0; i < n; i++ {
 		res[i] = v
 	}
@@ -105,6 +106,7 @@ func Repeat[T any](v T, n int) ([]T, error) {
 }
 
 func Flatten[T any](s [][]T) []T {
+	// determining the length of the final slice in advance to avoid unecessary allocations
 	var l int
 	for i := 0; i < len(s); i++ {
 		l += len(s[i])

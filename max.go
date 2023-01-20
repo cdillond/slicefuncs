@@ -5,6 +5,7 @@ import (
 )
 
 // These functions are implemented based on their individual types instead of as generics to avoid having to create a type parameter that includes all Numbers except complex64 and complex128.
+// Also because implementation details vary by type.
 
 func MaxUint(s []uint) (uint, error) {
 	var max uint

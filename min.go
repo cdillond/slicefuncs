@@ -5,6 +5,8 @@ import (
 )
 
 // These functions are implemented based on their individual types instead of as generics to avoid having to create a type parameter that includes all Numbers except complex64 and complex128.
+// Also because implementation details vary by type.
+
 func MinUint(s []uint) (uint, error) {
 	var min uint
 	if len(s) < 1 {
